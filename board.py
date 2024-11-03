@@ -143,17 +143,19 @@ class Board:
         self.cols = cols
         self.num_mines = num_mines
         self.seed = seed if seed is not None else random.randint(0, 1000000)
-        print(f'Seed used for board generation: {self.seed}')
+        print(f'Seed used for board generation: {seed}')
         self.board_values = self.generate_board()
-        self.board_hidden = [['-' for _ in range(self.cols)] for _ in range(self.rows)]
+        self.board_hidden = [['-' for _ in range(cols)] for _ in range(rows)]
         # self.board_final =
+        self.print_board(self.board_values)
+        print('_____________________________')
 
     def generate_board(self):
         """Generate a Minesweeper board with mines and numbers based on the seed."""
         board_values = [[0 for _ in range(self.cols)] for _ in range(self.rows)]
 
-        # if self.seed is not None:
-        #     random.seed(self.seed)
+        if self.seed is not None:
+            random.seed(self.seed)
 
         # Tracks the number of mines left to place
         mines_to_place = self.num_mines
@@ -220,10 +222,11 @@ class Board:
         # BFS implementation
         # Stop if the chosen cell is a mine
         if self.board_values[row_start][col_start] == -1:
-            return
+            return []
 
         visited_coords = set()  # Set up the trackers to make sure that coordinates are not repeated
         queue_coords = deque([(row_start, col_start)])  # Creates the queue to search through
+        cells_to_reveal = []
 
         directions = [
             (-1, 0), (1, 0), (0, -1), (0, 1),  # Up, down, left, right
@@ -240,6 +243,7 @@ class Board:
                 continue
 
             visited_coords.add((row, col))  # Check off this coordinate in the future
+            cells_to_reveal.append((row, col))
 
             # If the cell is not an empty cell, then move on
             if self.board_values[row][col] != 0:
@@ -251,6 +255,7 @@ class Board:
                 # If it is in bounds and the cell is currently hidden
                 if 0 <= new_row < self.rows and 0 <= new_col < self.cols and self.board_hidden[new_row][new_col] == '-':
                     queue_coords.append((new_row, new_col)) # Add new coordinates to be checked
+        return cells_to_reveal
 
     def flag_cell(self, row, col):
         """Sets a flag on the cell given the row and column."""
@@ -259,15 +264,17 @@ class Board:
 
     def reveal_full_board(self):
         """Reveal all cells, showing the full board."""
+        final_board = self.board_values
         for row in range(self.rows):
             for col in range(self.cols):
                 if self.board_values[row][col] == -1:
                     self.board_hidden[row][col] = '*'
                 else:
                     self.board_hidden[row][col] = str(self.board_values[row][col])
+        return final_board
 
-    @staticmethod
-    def print_board(b):
+    # @staticmethod
+    def print_board(self, b):
         """Prints the board in a readable format. Meant for testing"""
         for row in b:
             print(" ".join(f"{cell:>3}" for cell in row))
