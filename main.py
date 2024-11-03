@@ -62,11 +62,11 @@ from board import Board  # Assuming your Board class and related functions are i
 import time
 
 
-# Step 2: Define any helper functions if necessary
-def display_board(board):
-    """Function to print the board in a user-friendly way."""
-    for row in board:
-        print(" ".join(row))
+# # Step 2: Define any helper functions if necessary
+# def display_board(board):
+#     """Function to print the board in a user-friendly way."""
+#     for row in board:
+#         print(" ".join(row))
 
 
 # Step 3: Set up the game
@@ -74,8 +74,8 @@ def initialize_game():
     # Game settings
     rows = 6  # Number of rows
     cols = 6  # Number of columns
-    num_mines = 5  # Number of mines
-    seed = 42  # Optional: use None for random boards
+    num_mines = 1  # Number of mines
+    seed = None  # Optional: use None for random boards
 
     # Initialize the board
     game_board = Board(rows, cols, num_mines, seed)
@@ -91,7 +91,7 @@ def game_loop(board):
     while not game_over:
         # Display the hidden board to the player
         print("\nCurrent Board:")
-        display_board(board.board_hidden)
+        Board.print_board(board.board_hidden)
 
         # Get user input (for interactive games)
         try:
@@ -102,17 +102,19 @@ def game_loop(board):
             continue
 
         # Reveal cell and check for win/loss
-        board.reveal_empty_cell_helper(row, col)  # Use your reveal function
-        if board.board_values[row][col] == -1:
-            print("Boom! You hit a mine!")
-            game_over = True
-        else:
-            # Check for win condition if all non-mine cells are revealed
-            game_over = check_win_condition(board)
+        # board.reveal_empty_cell_helper(row, col)  # Use your reveal function
+        # if board.board_values[row][col] == -1:
+        #     print("Boom! You hit a mine!")
+        #     game_over = True
+        # else:
+        #     # Check for win condition if all non-mine cells are revealed
+        #     game_over = check_win_condition(board)
+
+        board.reveal_cell(row, col)
 
     # Show the final board after the game ends
     print("\nFinal Board:")
-    display_board(board.board_hidden)
+    board.print_board(board.board_values)
 
 
 # Optional: Define a function to check win condition
