@@ -140,10 +140,11 @@
 # main.py
 
 from game_state import GameState
-
+import tkinter as tk
+from minesweeper_gui import MinesweeperGUI  # Import the MinesweeperGUI class
 
 def game_loop():
-    rows, cols, num_mines = 6, 6, 5
+    rows, cols, num_mines = 10, 10, 10
     seed = 42
     game_state = GameState(rows, cols, num_mines, seed)
 
@@ -183,6 +184,25 @@ def get_valid_input():
             # Catch ValueError if input can't be converted to integers
             print("Invalid input. Please enter two integers separated by a space.")
 
+# main.py
+
+
+def main():
+    # Initialize Tkinter window
+    root = tk.Tk()
+    root.title("Minesweeper")
+
+    # Game configuration: set rows, cols, mines, and optional seed
+    rows, cols, num_mines, seed = 10, 10, 10, 42  # Adjust these values as needed
+
+    # Initialize the Minesweeper GUI with the Tkinter window and game settings
+    app = MinesweeperGUI(root, rows, cols, num_mines, seed)
+
+    # Start the Tkinter main loop
+    root.mainloop()
+
 
 if __name__ == "__main__":
-    game_loop()
+    main()
+    # game_loop()
+
