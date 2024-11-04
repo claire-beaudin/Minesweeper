@@ -193,7 +193,7 @@ def main():
     root.title("Minesweeper")
 
     # Game configuration: set rows, cols, mines, and optional seed
-    rows, cols, num_mines, seed = 10, 10, 10, 42  # Adjust these values as needed
+    rows, cols, num_mines, seed = 5, 5, 5, 42  # Adjust these values as needed
 
     # Initialize the Minesweeper GUI with the Tkinter window and game settings
     app = MinesweeperGUI(root, rows, cols, num_mines, seed)

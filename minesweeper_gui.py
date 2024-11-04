@@ -2,6 +2,7 @@
 
 import tkinter as tk
 from functools import partial
+from tkinter import messagebox
 from game_state import GameState  # Import GameState to handle game logic
 
 class MinesweeperGUI:
@@ -34,43 +35,27 @@ class MinesweeperGUI:
 
     def reveal_cell(self, row, col):
         """Reveal a cell and update the GUI based on the game state."""
-
-        # result = self.game_state.board.reveal_cell(row, col)
-        # print(result)
-        #
-        # if result == 'mine':
-        #     self.reveal_full_board()
-        # elif result == 'empty':
-        #     self.buttons[row][col]
-        #     # self.show_message("Game Over", "You hit a mine!")
-
         result = self.game_state.reveal_cell(row, col)
-        # print("result:", result)
 
-        if result == 'mine':
+        if result == 'game_over':  # If a mine is clicked
             self.reveal_full_board()
-            # self.show_message("Game Over", "You hit a mine!")
-        # need to implement this
-        # something wrong here
-        elif self.game_state.check_win_condition():
+            self.show_message("Game Over", "You hit a mine!")
+        elif result == 'win':  # If the player wins
             self.reveal_full_board()
-            # self.show_message("Congratulations", "You've won the game!")
+            self.show_message("Congratulations", "You've won the game!")
         elif isinstance(result, set):  # Multiple cells to reveal (empty cells and neighbors)
             for r, c in result:
                 self.update_button(r, c)
         else:  # Single cell reveal (numbered cell)
             self.update_button(row, col)
 
-        print('___________________________')
-
-    # not working
     def flag_cell(self, row, col):
         """Toggle a flag on right-click."""
         self.game_state.flag_cell(row, col)  # Use GameState for flagging logic
         button = self.buttons[row][col]
         if (row, col) in self.game_state.flagged_cells:
             button.config(text="🚩")  # Set flag icon
-        else:
+        elif (row, col) not in self.game_state.revealed_cells:
             button.config(text="")  # Remove flag icon
 
     def update_button(self, row, col):
@@ -91,7 +76,6 @@ class MinesweeperGUI:
                 self.update_button(r, c)
                 self.buttons[r][c].config(state="disabled")  # Disable all buttons
 
-    # not working
-    # def show_message(self, title, message):
-    #     """Display a pop-up message for game over or win."""
-    #     tk.messagebox.showinfo(title, message)
+    def show_message(self, title, message):
+        """Display a pop-up message for game over or win."""
+        messagebox.showinfo(title, message)
