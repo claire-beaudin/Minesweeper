@@ -1,6 +1,5 @@
 # game_state.py
 from board import Board
-from new_board import NewBoard
 from collections import deque
 
 
@@ -11,7 +10,7 @@ class GameState:
         self.cols = cols
         self.num_mines = num_mines
         self.seed = seed
-        self.board = NewBoard(rows, cols, num_mines, seed)
+        self.board = Board(rows, cols, num_mines, seed)
         self.revealed_cells = set()  # Track revealed cells
         self.flagged_cells = set()  # Track flagged cells
         self.game_over = False

@@ -3,7 +3,6 @@
 import tkinter as tk
 from functools import partial
 from game_state import GameState  # Import GameState to handle game logic
-from board import Board
 
 class MinesweeperGUI:
     def __init__(self, master, rows, cols, num_mines, seed=None):
